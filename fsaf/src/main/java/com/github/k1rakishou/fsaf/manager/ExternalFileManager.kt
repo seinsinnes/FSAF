@@ -6,6 +6,7 @@ import android.provider.DocumentsContract
 import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.documentfile.provider.DocumentFile
+import android.annotation.SuppressLint
 import com.github.k1rakishou.fsaf.BadPathSymbolResolutionStrategy
 import com.github.k1rakishou.fsaf.document_file.CachingDocumentFile
 import com.github.k1rakishou.fsaf.extensions.getMimeFromFilename
@@ -32,6 +33,7 @@ open class ExternalFileManager(
   }
 
   @Suppress("UNCHECKED_CAST")
+  @SuppressLint("NewApi")
   override fun create(baseDir: AbstractFile, segments: List<Segment>): ExternalFile? {
     val root = baseDir.getFileRoot<CachingDocumentFile>()
     check(root !is Root.FileRoot) {
@@ -354,12 +356,16 @@ open class ExternalFileManager(
   override fun getLength(file: AbstractFile): Long = toDocumentFile(file.clone())?.length() ?: 0L
 
   override fun listFiles(dir: AbstractFile): List<ExternalFile> {
+    Log.d(TAG, "In EFM listFiles")
     val root = dir.getFileRoot<CachingDocumentFile>()
     check(root !is Root.FileRoot) { "listFiles() Cannot use listFiles with FileRoot" }
+    
 
     val docFile = toDocumentFile(dir.clone())
       ?: return emptyList()
 
+    Log.d(TAG, "EFM listFiles: $appContext ${docFile.uri()} ${directoryManager.isBaseDir(dir)}")
+    
     return SAFHelper.listFilesFast(appContext, docFile.uri(), directoryManager.isBaseDir(dir))
       .map { snapshotFile ->
         return@map ExternalFile(

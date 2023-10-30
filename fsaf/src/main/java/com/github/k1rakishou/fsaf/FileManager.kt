@@ -6,6 +6,7 @@ import android.os.Environment
 import android.os.ParcelFileDescriptor
 import android.provider.DocumentsContract
 import android.util.Log
+import android.annotation.SuppressLint
 import androidx.documentfile.provider.DocumentFile
 import com.github.k1rakishou.fsaf.document_file.CachingDocumentFile
 import com.github.k1rakishou.fsaf.extensions.copyInto
@@ -419,6 +420,7 @@ class FileManager(
     // been copied so far and how many are left
     updateFunc: ((Int, Int) -> Boolean)? = null
   ): Boolean {
+    Log.e(TAG, "In copy contents")
     if (!exists(sourceDir)) {
       Log.e(TAG, "Source directory does not exists, path = ${sourceDir.getFullPath()}")
       return false
@@ -428,6 +430,11 @@ class FileManager(
       Log.d(TAG, "Source directory is empty, nothing to copy")
       return true
     }
+    Log.e(TAG, "FileManagers: ${sourceDir.getFileManagerId()} ${managers[sourceDir.getFileManagerId()]}")
+
+    listFiles(sourceDir).forEach { innerFile ->
+            Log.d(TAG, "Contains: $innerFile")
+          }
 
     if (!exists(destDir)) {
       Log.e(TAG, "Destination directory does not exists, path = ${sourceDir.getFullPath()}")
@@ -444,6 +451,7 @@ class FileManager(
       return false
     }
 
+    Log.e(TAG, "Traverse directory.")
     // TODO: instead of collecting all of the files and only then start copying, do the copying
     //  file by file inside the traverse callback to save the memory
     val files = LinkedList<AbstractFile>()
@@ -459,7 +467,7 @@ class FileManager(
 
     val totalFilesCount = files.size
     val prefix = sourceDir.getFullPath()
-
+     Log.e(TAG, "Start copy.")
     for ((currentFileIndex, file) in files.withIndex()) {
       // Holy shit this hack is so fucking disgusting and may break literally any minute.
       // If this shit breaks then blame google for providing such a bad API.
@@ -579,7 +587,7 @@ class FileManager(
     while (queue.isNotEmpty()) {
       val file = queue.poll()
         ?: break
-
+      //Log.e(TAG, "${queue.size} Traversing $file fullPath: $directoryFullPath")
       when {
         isDirectory(file) -> {
           val innerFiles = listFiles(file)
@@ -964,6 +972,7 @@ class FileManager(
   /**
    * !!! Experimental !!!
    * */
+  @SuppressLint("NewApi")
   private fun splitDocumentId(file: AbstractFile, spliterator: (String) -> String): String {
     if (file is RawFile) {
       // RawFiles have primary storage since they can't access sd-card
@@ -1026,6 +1035,7 @@ class FileManager(
    * This means that it cannot be used as a tree uri so we need to use DocumentFile.fromSingleUri
    * instead.
    * */
+  @SuppressLint("NewApi")
   private fun isBogusTreeUri(uri: Uri, docTreeUri: Uri): Boolean {
     if (uri.toString() == docTreeUri.toString()) {
       return false

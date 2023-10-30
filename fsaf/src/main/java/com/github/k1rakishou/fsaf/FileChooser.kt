@@ -7,6 +7,7 @@ import android.net.Uri
 import android.provider.DocumentsContract
 import android.util.Log
 import android.webkit.MimeTypeMap
+import android.annotation.SuppressLint
 import androidx.documentfile.provider.DocumentFile
 import com.github.k1rakishou.fsaf.callback.*
 import com.github.k1rakishou.fsaf.callback.directory.DirectoryChooserCallback
@@ -366,7 +367,7 @@ class FileChooser(
 
     callback.onResult(uris)
   }
-
+  @SuppressLint("NewApi")
   private fun handleDirectoryChooserCallback(
     callback: DirectoryChooserCallback,
     resultCode: Int,
@@ -444,6 +445,7 @@ class FileChooser(
   /**
    * Use this method to remove all of the permissions from the base directory by it's uri
    * */
+  @SuppressLint("NewApi")
   fun forgetSAFTree(directoryUri: Uri): Boolean {
     val directory = DocumentFile.fromTreeUri(appContext, directoryUri)
     if (directory == null) {

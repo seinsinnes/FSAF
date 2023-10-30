@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.provider.DocumentsContract
 import android.util.Log
+import android.annotation.SuppressLint
 import com.github.k1rakishou.fsaf.document_file.CachingDocumentFile
 import com.github.k1rakishou.fsaf.file.AbstractFile
 import com.github.k1rakishou.fsaf.file.ExternalFile
@@ -30,7 +31,8 @@ open class DirectoryManager(
 
     baseDirList[clazz as Class<BaseDirectory>] = baseDirectory
   }
-
+  
+  @SuppressLint("NewApi")
   fun checkBaseDirSafStillHasPermissions(dirUri: Uri): Boolean {
     val treeUri = DocumentsContract.buildTreeDocumentUri(
       dirUri.authority,

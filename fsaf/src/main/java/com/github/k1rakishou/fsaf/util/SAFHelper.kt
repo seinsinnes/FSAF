@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.DocumentsContract
 import android.util.Log
+import android.annotation.SuppressLint
 import androidx.documentfile.provider.DocumentFile
 import com.github.k1rakishou.fsaf.document_file.CachingDocumentFile
 import com.github.k1rakishou.fsaf.document_file.SnapshotDocumentFile
@@ -135,6 +136,7 @@ object SAFHelper {
    * of those operations require and IPC call which slow as fuck. So it's way faster to just preload
    * all that shit at once
    * */
+  @SuppressLint("NewApi")
   fun <T> findFile(
     appContext: Context,
     parentUri: Uri,
@@ -197,7 +199,7 @@ object SAFHelper {
       return@use null
     }
   }
-
+  @SuppressLint("NewApi")
   fun <T> findManyFilesInDir(
     appContext: Context,
     dirUri: Uri,
@@ -242,6 +244,7 @@ object SAFHelper {
       .map { iteratedFile -> iteratedFile.file }
   }
 
+  @SuppressLint("NewApi")
   private fun <T> iterateCursor(
     appContext: Context,
     dirUri: Uri,
@@ -301,6 +304,8 @@ object SAFHelper {
   /**
    * Same as above but preloads the whole directory.
    * */
+
+  @SuppressLint("NewApi")
   fun listFilesFast(
     appContext: Context,
     parentUri: Uri,
@@ -334,6 +339,9 @@ object SAFHelper {
         } else {
           DocumentFile.fromSingleUri(appContext, documentUri)
         }
+	
+        Log.e(TAG, "listFilesFast() documentFile == $documentFile, mimeType = $mimeType")
+
 
         if (documentFile == null) {
           Log.e(TAG, "listFilesFast() documentFile == null, mimeType = $mimeType")
@@ -363,6 +371,7 @@ object SAFHelper {
     } ?: emptyList()
   }
 
+  @SuppressLint("NewApi")
   private fun buildChildrenUri(
     isTreeUri: Boolean,
     appContext: Context,

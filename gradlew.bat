@@ -5,6 +5,8 @@
 @rem
 @rem ##########################################################################
 
+SET ANDROID_SDK_ROOT=%LOCALAPPDATA%\Android\Sdk
+
 @rem Set local scope for the variables with windows NT shell
 if "%OS%"=="Windows_NT" setlocal
 
@@ -17,10 +19,12 @@ set APP_HOME=%DIRNAME%
 set DEFAULT_JVM_OPTS=
 
 @rem Find java.exe
-if defined JAVA_HOME goto findJavaFromJavaHome
+@rem if defined JAVA_HOME goto findJavaFromJavaHome
 
-set JAVA_EXE=java.exe
-%JAVA_EXE% -version >NUL 2>&1
+set JAVA_EXE=%ProgramFiles%\Unity\Editor\Data\PlaybackEngines\AndroidPlayer\Tools\OpenJDK\Windows\bin\java.exe
+echo %JAVA_EXE%
+@rem %JAVA_EXE% -version >NUL 2>&1
+"%JAVA_EXE%" -version
 if "%ERRORLEVEL%" == "0" goto init
 
 echo.

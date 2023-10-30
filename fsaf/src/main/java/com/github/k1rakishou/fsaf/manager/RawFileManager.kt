@@ -2,6 +2,7 @@ package com.github.k1rakishou.fsaf.manager
 
 import android.os.ParcelFileDescriptor
 import android.util.Log
+import android.annotation.SuppressLint
 import com.github.k1rakishou.fsaf.BadPathSymbolResolutionStrategy
 import com.github.k1rakishou.fsaf.extensions.appendMany
 import com.github.k1rakishou.fsaf.extensions.extension
@@ -236,6 +237,7 @@ class RawFileManager(
   }
 
   override fun listFiles(dir: AbstractFile): List<RawFile> {
+    Log.d(TAG, "In RFM listFiles")
     val root = dir.getFileRoot<File>()
     check(root !is Root.FileRoot) { "listFiles() Cannot use listFiles with FileRoot" }
 
@@ -245,7 +247,7 @@ class RawFileManager(
       ?.sortedWith(RAW_FILES_COMPARATOR)
       ?: emptyList()
   }
-
+  @SuppressLint("NewApi")
   override fun getParcelFileDescriptor(
     file: AbstractFile,
     fileDescriptorMode: FileDescriptorMode
