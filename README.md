@@ -1,6 +1,4 @@
-# Fuck Storage Access Framework (FSAF)
-
-<p align="left"><a href="https://jitpack.io/#K1rakishou/Fuck-Storage-Access-Framework/v1.0"><img src="https://jitpack.io/v/K1rakishou/Fuck-Storage-Access-Framework.svg" width="120"></a></p> 
+# FSAF
 
 If you ever had to deal with Storage Access Framework you must understand the pain 
 imposed on you by it's API and lack of any good examples.
@@ -23,10 +21,6 @@ Samples
 ---
 
 Latest version:
-
-```
-implementation 'com.github.K1rakishou:Fuck-Storage-Access-Framework:v1.1.3'
-```
 
 There are three main scenarios when dealing with files:
 * Read or write to a user-provided file.
